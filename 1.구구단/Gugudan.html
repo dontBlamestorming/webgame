@@ -9,37 +9,41 @@
 </head>
 
 <body>
-  <div id="root">
-    {{firstNumber}} 곱하기 {{secondNumber}}는?
-    <br />
+<div id="root">
+  <div>{{firstNumber}} 곱하기 {{secondNumber}}는?</div>
+  <form @submit="onSubmitForm">
     <input v-model="input" type="number">
-    <button @click="onClickButton">입력</button>
-    <br/>
-    {{result}}
-  </div>
+    <button type="submit">입력</button>
+  </form>
+  <div>{{result}}</div>
+</div>
 
-  <script>
-    const app = new Vue({
-      el: '#root',
-      data: {
-        firstNumber: Math.floor(Math.random() * 10),
-        secondNumber: Math.floor(Math.random() * 10),
-        input: '',
-        result: '',
-      },
-      methods: {
-        onClickButton() {
-          if (this.input === String(this.firstNumber * this.secondNumber)) {
-            this.result = "정답"
-            this.input = ""
-          } else {
-            this.result = "땡!"
-            this.input = ""
-          }
+<script>
+  const app = new Vue({
+    el: '#root',
+    data: {
+      firstNumber: Math.floor(Math.random() * 10),
+      secondNumber: Math.floor(Math.random() * 10),
+      input: '',
+      result: '',
+    },
+    methods: {
+      onSubmitForm(e) {
+        e.preventDefault()
+
+        if (this.input === String(this.firstNumber * this.secondNumber)) {
+          this.result = "정답"
+          this.input = ""
+          this.firstNumber = Math.floor(Math.random() * 10)
+          this.secondNumber = Math.floor(Math.random() * 10)
+
+        } else {
+          this.result = "땡!"
+          this.input = ""
         }
-      },
-    })
-  </script>
+      }
+    },
+  })
+</script>
 </body>
 </html>
-현
