@@ -1,6 +1,15 @@
 module.exports = {
-    entry: {},
-    module: {},
+    entry: {
+        app: './main.js',
+    },
+    module: {
+        rules: [{
+
+        }],
+    },
     plugins: [],
-    output: {},
+    output: {
+        filename: '[name].js',
+        path: './dist',
+    },
 }
