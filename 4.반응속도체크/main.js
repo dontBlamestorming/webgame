@@ -2,4 +2,4 @@ import Vue from 'vue'
 
 import ResponseCheck from "./ResponseCheck";
 
-new Vue(ResponseCheck).$mount('#root')
+new Vue({ render: createElement => createElement(ResponseCheck)}).$mount('#root')
