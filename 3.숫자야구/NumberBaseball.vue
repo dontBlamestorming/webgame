@@ -12,7 +12,6 @@
         <div>{{ t.result }}</div>
       </li>
     </ul>
-    <div>{{answer}}</div>
   </div>
 </template>
 
@@ -48,12 +47,22 @@ export default {
         alert('게임을 다시 실행합니다.')
         this.result = '홈런'
         this.value = ''
+        this.answer = getNumbers()
         this.tries = []
         this.$refs.answer.focus()
       } else {
         let strike = 0
         let ball = 0
         const answerArray = this.value.split('').map(v => parseInt(v))
+
+        if (this.tries.length >= 9) {
+          this.result = `10번 넘게 돌려서 실패! 답은 ${this.answer.join(',')}입니다.`
+          alert('게임을 다시 시작합니다.')
+          this.value = ''
+          this.answer = getNumbers()
+          this.tries = []
+          this.$refs.answer.focus()
+        }
 
         for (let i = 0; i < 4; i += 1) {
           if (answerArray[i] === this.answer[i]) {
