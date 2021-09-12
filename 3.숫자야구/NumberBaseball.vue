@@ -11,15 +11,28 @@
         <div>{{ t.try }}</div>
         <div>{{ t.result }}</div>
       </li>
-
     </ul>
+    <div>{{answer}}</div>
   </div>
 </template>
 
 <script>
+const getNumbers = () => {
+  const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const array = []
+
+  for (let i = 0; i < 4; i += 1) {
+    const chosen = candidates.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+    array.push(chosen)
+  }
+
+  return array
+}
+
 export default {
   data() {
     return {
+      answer: getNumbers(), // ex) [1, 3, 5, 2]
       tries: [],
       value: '',
       result: ''
@@ -27,12 +40,38 @@ export default {
   },
   methods: {
     onSubmitForm() {
-      this.tries.push({
-        try: this.value,
-        result: '홈런'
-      })
-      this.value = ''
-      this.$refs.answer.focus()
+      if (this.value === this.answer.join("")) {
+        this.tries.push({
+          try: this.value,
+          result: '홈런'
+        })
+        alert('게임을 다시 실행합니다.')
+        this.result = '홈런'
+        this.value = ''
+        this.tries = []
+        this.$refs.answer.focus()
+      } else {
+        let strike = 0
+        let ball = 0
+        const answerArray = this.value.split('').map(v => parseInt(v))
+
+        for (let i = 0; i < 4; i += 1) {
+          if (answerArray[i] === this.answer[i]) {
+            // 정확한 답은 아니지만 개별 숫자와 그 자릿수 모두 정답인 경우
+            strike++;
+          } else if (this.answer.includes(-answerArray[i])) {
+            // 숫자만 정답과 동일한 경우
+            ball++;
+          }
+        }
+
+        this.tries.push({
+          try: this.value,
+          result: `${strike} 스트라이크, ${ball} 볼 입니다.`
+        })
+        this.value = ''
+        this.$refs.answer.focus()
+      }
     }
   }
 }
