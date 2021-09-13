@@ -6,12 +6,13 @@
     </div>
     <div>보너스!</div>
     <lotto-ball v-if="bonus" :number="bonus"></lotto-ball>
-    <button v-if="redo">한 번 더!</button>
+    <button v-if="redo" @click="onClickRedo">한 번 더!</button>
   </div>
 </template>
 
 <script>
 import LottoBall from "./LottoBall";
+const timeouts = []
 
 function getWinNumbers() {
   const shuffle = []
@@ -41,21 +42,33 @@ export default {
     }
   },
   methods: {
+    onClickRedo() {
+      this.winNumbers = getWinNumbers()
+      this.winBalls = []
+      this.redo = false
+      this.bonus = false
+      this.showBalls()
+    },
+    showBalls() {
+      for (let i = 0; i < this.winNumbers.length - 1; i++) {
+        timeouts[i] = setTimeout(() => {
+          this.winBalls.push(this.winNumbers[i])
+        }, (i + 1) * 1000)
+      }
+
+      timeouts[6] = setTimeout(() => {
+        this.bonus = this.winNumbers[6]
+        this.redo = true
+      }, 7000)
+    }
   },
   mounted() {
-    for (let i = 0; i < this.winNumbers.length - 1; i++) {
-      setTimeout(() => {
-        this.winBalls.push(this.winNumbers[i])
-      }, (i + 1) * 1000)
-    }
-
-    setTimeout(() => {
-      this.bonus = this.winNumbers[6]
-      this.redo = true
-    }, 7000)
+    this.showBalls()
   },
   beforeDestroy() {
-
+    timeouts.forEach((t) => {
+      clearTimeout(t)
+    })
   },
   watch: {},
 }
