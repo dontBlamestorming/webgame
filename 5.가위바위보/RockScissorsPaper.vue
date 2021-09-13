@@ -2,9 +2,9 @@
   <div>
     <div id="computer" :style="computedStyleObject"></div>
     <div>
-      <button @click="onClickButton('바위')">바위</button>
-      <button @click="onClickButton('가위')">가위</button>
-      <button @click="onClickButton('보')">보</button>
+      <button @click="onClickButton('rock')">바위</button>
+      <button @click="onClickButton('scisoors')">가위</button>
+      <button @click="onClickButton('paper')">보</button>
     </div>
     <div>{{ result }}</div>
     <div>현재 {{ score }}점</div>
@@ -17,6 +17,14 @@ const rspCoords = {
   rock: '0',
   scisoors: '-142px',
   paper: '-284px',
+}
+const scores = {
+  rock: 0,
+  scisoors: 1,
+  paper: -1
+}
+const computerChoice = (imgCoord) => {
+  return Object.entries(rspCoords).find(v => v[1] === imgCoord)[0]
 }
 
 export default {
@@ -36,7 +44,35 @@ export default {
   },
   methods: {
     onClickButton(choice) {
+      clearInterval(interval)
 
+      const myScore = scores[choice]
+      const cpuScore = scores[computerChoice(this.imgCoord)]
+      const diff = myScore - cpuScore
+
+      if (diff === 0) {
+        this.result = '비겼습니다.'
+
+      } else if ([-1, 2].includes(diff)) {
+        this.result = '이겼습니다.'
+        this.score += 1
+
+      } else {
+        this.result = '졌습니다.'
+        this.score -= 1
+      }
+
+      setTimeout(() => {
+        interval = setInterval(() => {
+          if (this.imgCoord === rspCoords.rock) {
+            this.imgCoord = rspCoords.scisoors
+          } else if (this.imgCoord === rspCoords.scisoors) {
+            this.imgCoord = rspCoords.paper
+          } else if (this.imgCoord === rspCoords.paper) {
+            this.imgCoord = rspCoords.rock
+          }
+        }, 100)
+      }, 1000)
     }
   },
   mounted() {
