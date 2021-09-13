@@ -12,6 +12,7 @@
 </template>
 
 <script>
+let interval = null
 const rspCoords = {
   rock: '0',
   scisoors: '-142px',
@@ -21,7 +22,7 @@ const rspCoords = {
 export default {
   data() {
     return {
-      imgCoord : rspCoords.rock,
+      imgCoord: rspCoords.rock,
       result: '',
       score: 0,
     }
@@ -35,7 +36,22 @@ export default {
   },
   methods: {
     onClickButton(choice) {
+
     }
+  },
+  mounted() {
+    interval = setInterval(() => {
+      if (this.imgCoord === rspCoords.rock) {
+        this.imgCoord = rspCoords.scisoors
+      } else if (this.imgCoord === rspCoords.scisoors) {
+        this.imgCoord = rspCoords.paper
+      } else if (this.imgCoord === rspCoords.paper) {
+        this.imgCoord = rspCoords.rock
+      }
+    }, 100)
+  },
+  beforeDestroy() {
+    clearTimeout(interval)
   }
 }
 
