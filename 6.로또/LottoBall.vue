@@ -24,8 +24,6 @@ export default {
         background = 'green'
       }
 
-      console.log(background)
-
       return {
         background,
       }
