@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="computer" :style="{ background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) 0 0`}"></div>
+    <div id="computer" :style="computedStyleObject"></div>
     <div>
       <button @click="onClickButton('바위')">바위</button>
       <button @click="onClickButton('가위')">가위</button>
@@ -12,14 +12,27 @@
 </template>
 
 <script>
+const rspCoords = {
+  rock: '0',
+  scisoors: '-142px',
+  paper: '-284px',
+}
+
 export default {
   data() {
     return {
+      imgCoord : rspCoords.rock,
       result: '',
       score: 0,
     }
   },
-  computed: {},
+  computed: {
+    computedStyleObject() {
+      return {
+        background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) ${this.imgCoord} 0`
+      }
+    }
+  },
   methods: {
     onClickButton(choice) {
     }
