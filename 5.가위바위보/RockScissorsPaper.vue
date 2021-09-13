@@ -5,6 +5,7 @@
       <button @click="onClickButton('rock')">바위</button>
       <button @click="onClickButton('scisoors')">가위</button>
       <button @click="onClickButton('paper')">보</button>
+      <button @click="onClickButton('stop')">그만하기</button>
     </div>
     <div>{{ result }}</div>
     <div>현재 {{ score }}점</div>
@@ -43,7 +44,22 @@ export default {
     }
   },
   methods: {
+    changeHand() {
+      interval = setInterval(() => {
+        if (this.imgCoord === rspCoords.rock) {
+          this.imgCoord = rspCoords.scisoors
+        } else if (this.imgCoord === rspCoords.scisoors) {
+          this.imgCoord = rspCoords.paper
+        } else if (this.imgCoord === rspCoords.paper) {
+          this.imgCoord = rspCoords.rock
+        }
+      }, 100)
+    },
     onClickButton(choice) {
+      if (choice === 'stop') {
+        clearTimeout(interval)
+        return
+      }
       clearInterval(interval)
 
       const myScore = scores[choice]
@@ -63,28 +79,12 @@ export default {
       }
 
       setTimeout(() => {
-        interval = setInterval(() => {
-          if (this.imgCoord === rspCoords.rock) {
-            this.imgCoord = rspCoords.scisoors
-          } else if (this.imgCoord === rspCoords.scisoors) {
-            this.imgCoord = rspCoords.paper
-          } else if (this.imgCoord === rspCoords.paper) {
-            this.imgCoord = rspCoords.rock
-          }
-        }, 100)
+        this.changeHand()
       }, 1000)
     }
   },
   mounted() {
-    interval = setInterval(() => {
-      if (this.imgCoord === rspCoords.rock) {
-        this.imgCoord = rspCoords.scisoors
-      } else if (this.imgCoord === rspCoords.scisoors) {
-        this.imgCoord = rspCoords.paper
-      } else if (this.imgCoord === rspCoords.paper) {
-        this.imgCoord = rspCoords.rock
-      }
-    }, 100)
+    this.changeHand()
   },
   beforeDestroy() {
     clearTimeout(interval)
