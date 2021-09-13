@@ -1,10 +1,13 @@
 <template>
   <div>
     <div>당첨 숫자</div>
-    <div class="ball" v-for="(number, index) in numbers" :key="index">{{number}}</div>
+    <div class="ball" v-for="(number, index) in numbers" :key="index">{{ number }}</div>
+    <div id="결과창">
+      <lotto-ball v-for="(number, index) in numbers" :key="index">{{ number }}</lotto-ball>
+    </div>
     <div>보너스!</div>
-    <div class="ball"></div>
-    <button>한 번 더!</button>
+    <lotto-ball v-if="bonusNumber"></lotto-ball>
+    <button v-if="redo">한 번 더!</button>
   </div>
 </template>
 
@@ -14,6 +17,8 @@ let interval = null
 export default {
   data() {
     return {
+      redo: false,
+      bonusNumber: false,
       numbers: [],
     }
   },
@@ -35,9 +40,7 @@ export default {
   beforeDestroy() {
 
   },
-  watch: {
-
-  },
+  watch: {},
 }
 
 </script>
