@@ -1,8 +1,10 @@
 <template>
-  <td @click="onClickTd">{{cellData}}</td>
+  <td @click="onClickTd(cellData)">{{cellData}}</td>
 </template>
 
 <script>
+import EventBus from "./EventBus"
+
 export default {
   props: {
     cellData: String,
@@ -10,53 +12,8 @@ export default {
     cellIndex: Number,
   },
   methods: {
-    onClickTd() {
-      const rootData = this.$root.$data // 이미 클릭된 칸의 경우
-      let win = false
-
-      if (this.cellData) return
-
-      this.$set(rootData.tableData[this.rowIndex], this.cellIndex, rootData.turn)
-
-      if (rootData.tableData[this.rowIndex][0] === rootData.turn
-          && rootData.tableData[this.rowIndex][1] === rootData.turn
-          && rootData.tableData[this.rowIndex][2] === rootData.turn) { win = true }
-
-      if (rootData.tableData[0][this.cellIndex] === rootData.turn
-          && rootData.tableData[1][this.cellIndex] === rootData.turn
-          && rootData.tableData[2][this.cellIndex] === rootData.turn) { win = true }
-
-      if (rootData.tableData[0][0] === rootData.turn
-          && rootData.tableData[1][1] === rootData.turn
-          && rootData.tableData[2][2] === rootData.turn) { win = true }
-
-      if (rootData.tableData[0][2] === rootData.turn
-          && rootData.tableData[1][1] === rootData.turn
-          && rootData.tableData[2][0] === rootData.turn) { win = true }
-
-      if (win) {
-        rootData.winner = rootData.turn
-        rootData.turn = 'O'
-        rootData.tableData = [['', '', ''], ['', '', ''], ['', '', '']]
-      } else { // 무승부
-        let all = true // all이 true면 무승부라는 뜻
-
-        rootData.tableData.forEach((row) => { // 무승부 검사
-          row.forEach((cell) => {
-            if (!cell) {
-              all = false
-            }
-          })
-        })
-
-        if (all) { // 무승부
-          rootData.winner = ''
-          rootData.turn = 'O'
-          rootData.tableData = [['', '', ''], ['', '', ''], ['', '', '']]
-        } else {
-          rootData.turn = rootData.turn === 'O' ? 'X' : 'O'
-        }
-      }
+    onClickTd(cellData) {
+      EventBus.$emit('clickTd', this.rowIndex, this.cellIndex, cellData)
     }
   }
 }
