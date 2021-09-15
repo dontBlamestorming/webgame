@@ -42,6 +42,10 @@ export default new Vuex.Store({
       state.winner = ''
     }
   },
-  getters: {},
+  getters: {
+    turnMessage(state) {
+      return state.turn + "님이 승리하셨습니다."
+    }
+  },
   actions: {},
 })
