@@ -10,27 +10,28 @@
 </template>
 
 <script>
-  import TdComponent from './TdComponent'
+import { mapState } from 'vuex'
+import TdComponent from './TdComponent'
 
-  export default {
-    components: {
-      TdComponent,
-    },
-    props: {
-      // rowData: Array,
-      rowIndex: Number,
-    },
-    data() {
-      return {
-        parent: 'TrComponent',
-      }
-    },
-    computed: {
-      rowData() {
-        return this.$store.state.tableData[this.rowIndex]
-      }
+export default {
+  components: {
+    TdComponent,
+  },
+  props: {
+    // rowData: Array,
+    rowIndex: Number,
+  },
+  data() {
+    return {
+      parent: 'TrComponent',
+    }
+  },
+  computed: {
+    rowData() {
+      return this.$store.state.tableData[this.rowIndex]
     }
   }
+}
 </script>
 
 <style></style>
