@@ -1,5 +1,5 @@
 <template>
-  <td @click="onClickTd(cellData)">{{ cellData }}</td>
+  <td @click="onClickTd">{{ cellData }}</td>
 </template>
 
 <script>
@@ -7,15 +7,25 @@ import { SET_WINNER, CLICK_CELL, CHANGE_TURN, RESET_GAME, NO_WINNER } from "./st
 
 export default {
   props: {
-    cellData: String,
     rowIndex: Number,
     cellIndex: Number,
   },
+  computed: {
+    cellData() {
+      return this.$store.state.tableData[this.rowIndex][this.cellIndex]
+    },
+    tableData() {
+      return this.$store.state.tableData
+    },
+    turn() {
+      return this.$store.state.turn
+    }
+  },
   methods: {
-    onClickTd(cellData) {
+    onClickTd() {
       let win = false
 
-      if (cellData) return
+      if (this.cellData) return
 
       this.$store.commit(CLICK_CELL, {
         row: this.rowIndex,
