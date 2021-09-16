@@ -71,7 +71,7 @@ export default new Vuex.Store({
     result: '',
   },
   mutations: {
-    [START_GAME](state, { row, cell, mine }) {
+    [START_GAME](state, {row, cell, mine}) {
       state.data = {
         row,
         cell,
@@ -81,25 +81,28 @@ export default new Vuex.Store({
       state.timer = 0
       state.halted = false
     },
-    [OPEN_CELL](state, { row, cell }) {
+    [OPEN_CELL](state, {row, cell}) {
       Vue.set(state.tableData[row], cell, CODE.OPENED)
     },
-    [CLICK_MINE](state) {},
-    [FLAG_CELL](state, { row, cell }) {
+    [CLICK_MINE](state, {row, cell}) {
+      state.halted = true // stop game
+      Vue.set(state.tableData[row], cell, CODE.CLICKED_MINE)
+    },
+    [FLAG_CELL](state, {row, cell}) {
       if (state.tableData[row][cell] === CODE.MINE) {
         Vue.set(state.tableData[row], cell, CODE.FLAG_MINE)
       } else {
         Vue.set(state.tableData[row], cell, CODE.FLAG)
       }
     },
-    [QUESTION_CELL](state, { row, cell }) {
+    [QUESTION_CELL](state, {row, cell}) {
       if (state.tableData[row][cell] === CODE.FLAG_MINE) {
         Vue.set(state.tableData[row], cell, CODE.QUESTION_MINE)
       } else {
         Vue.set(state.tableData[row], cell, CODE.QUESTION)
       }
     },
-    [NORMALIZE_CELL](state, { row, cell }) {
+    [NORMALIZE_CELL](state, {row, cell}) {
       if (state.tableData[row][cell] === CODE.QUESTION_MINE) {
         Vue.set(state.tableData[row], cell, CODE.MINE)
       } else {

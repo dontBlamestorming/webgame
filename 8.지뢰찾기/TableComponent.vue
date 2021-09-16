@@ -15,29 +15,51 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
-import {CODE, OPEN_CELL, FLAG_CELL, QUESTION_CELL, NORMALIZE_CELL} from "./store"
+import { mapState } from 'vuex'
+import {
+  CODE,
+  OPEN_CELL,
+  FLAG_CELL,
+  QUESTION_CELL,
+  NORMALIZE_CELL,
+  CLICK_MINE
+} from "./store"
 
 export default {
   methods: {
     onClickTd(row, cell) {
-      if (this.halted) { return }
-      this.$store.commit(OPEN_CELL, { row, cell })
+      if (this.halted) {
+        return
+      }
+
+      switch (this.tableData[row][cell]) {
+        case CODE.NORMAL:
+          return this.$store.commit(OPEN_CELL, {row, cell})
+        case CODE.MINE:
+          return this.$store.commit(CLICK_MINE, {row, cell})
+        default:
+          return
+      }
+
     },
     onRightClickTd(row, cell) {
-      if (this.halted) { return }
+      if (this.halted) {
+        return
+      }
       switch (this.tableData[row][cell]) {
         case CODE.NORMAL:
         case CODE.MINE:
-          this.$store.commit(FLAG_CELL, { row, cell })
+          this.$store.commit(FLAG_CELL, {row, cell})
           return
         case CODE.FLAG:
         case CODE.FLAG_MINE:
-          this.$store.commit(QUESTION_CELL, { row, cell })
+          this.$store.commit(QUESTION_CELL, {row, cell})
           return
         case CODE.QUESTION:
         case CODE.QUESTION_MINE:
-          this.$store.commit(NORMALIZE_CELL, { row, cell })
+          this.$store.commit(NORMALIZE_CELL, {row, cell})
+          return
+        default:
           return
       }
     }
