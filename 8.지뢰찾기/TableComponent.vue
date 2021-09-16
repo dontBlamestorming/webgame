@@ -4,7 +4,10 @@
       <td
         v-for="(cellData, cellIndex) in rowData"
         :key="cellIndex"
-        :style="cellDataStyle(rowIndex, cellIndex)">
+        :style="cellDataStyle(rowIndex, cellIndex)"
+        @click="onClickTd(rowIndex, cellIndex)"
+        @contextmenu.prevent="onRightClickTd(rowIndex, cellIndex)"
+      >
         {{ cellDataText(rowIndex, cellIndex) }}
       </td>
     </tr>
@@ -13,11 +16,34 @@
 
 <script>
 import {mapState} from 'vuex'
-import {CODE} from "./store"
+import {CODE, OPEN_CELL, FLAG_CELL, QUESTION_CELL, NORMALIZE_CELL} from "./store"
 
 export default {
+  methods: {
+    onClickTd(row, cell) {
+      if (this.halted) { return }
+      this.$store.commit(OPEN_CELL, { row, cell })
+    },
+    onRightClickTd(row, cell) {
+      if (this.halted) { return }
+      switch (this.tableData[row][cell]) {
+        case CODE.NORMAL:
+        case CODE.MINE:
+          this.$store.commit(FLAG_CELL, { row, cell })
+          return
+        case CODE.FLAG:
+        case CODE.FLAG_MINE:
+          this.$store.commit(QUESTION_CELL, { row, cell })
+          return
+        case CODE.QUESTION:
+        case CODE.QUESTION_MINE:
+          this.$store.commit(NORMALIZE_CELL, { row, cell })
+          return
+      }
+    }
+  },
   computed: {
-    ...mapState(['tableData']),
+    ...mapState(['tableData', 'halted']),
     cellDataStyle(state) {
       return (row, cell) => {
         switch (this.$store.state.tableData[row][cell]) {
