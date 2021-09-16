@@ -9,6 +9,7 @@ export const CLICK_MINE = "CLICK_MINE"
 export const FLAG_CELL = 'FLAG_CELL'
 export const QUESTION_CELL = 'QUESTION_CELL'
 export const NORMALIZE_CELL = 'NORMALIZE_CELL'
+export const INCREMENT_TIMER = 'INCREMENT_TIMER'
 
 export const CODE = {
   MINE: -7,
@@ -66,6 +67,7 @@ export default new Vuex.Store({
       mine: 0,
     },
     timer: 0,
+    halted: true,
     result: '',
   },
   mutations: {
@@ -77,12 +79,16 @@ export default new Vuex.Store({
       }
       state.tableData = plantMine(row, cell, mine)
       state.timer = 0
+      state.halted = false
     },
     [OPEN_CELL](state) {},
     [CLICK_MINE](state) {},
     [FLAG_CELL](state) {},
     [QUESTION_CELL](state) {},
     [NORMALIZE_CELL](state) {},
+    [INCREMENT_TIMER](state) {
+      state.timer += 1
+    },
   },
   getters: {}
 })
