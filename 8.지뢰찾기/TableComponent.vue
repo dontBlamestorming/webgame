@@ -40,8 +40,7 @@ export default {
         default:
           return
       }
-
-    },
+현    },
     onRightClickTd(row, cell) {
       if (this.halted) {
         return
@@ -102,7 +101,7 @@ export default {
           case CODE.QUESTION_MINE:
             return '?'
           default:
-            return ''
+            return this.$store.state.tableData[row][cell] || ''
         }
       }
     },

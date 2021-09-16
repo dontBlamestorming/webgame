@@ -82,7 +82,37 @@ export default new Vuex.Store({
       state.halted = false
     },
     [OPEN_CELL](state, {row, cell}) {
-      Vue.set(state.tableData[row], cell, CODE.OPENED)
+      function checkAround() { // 클릭된 cell 기준 주변 8칸이 지뢰인지 검색
+        let around = []
+
+        // 특정 cell 기준 윗 라인
+        if (state.tableData[row - 1]) {
+          around = around.concat([
+            state.tableData[row - 1][cell - 1], state.tableData[row - 1][cell], state.tableData[row - 1][cell + 1]
+          ])
+        }
+
+        // 특정 cell 기준 중간라인
+        around = around.concat([
+          state.tableData[row][cell - 1], state.tableData[row][cell + 1]
+        ])
+
+        // 특정 cell 기준 아래 라인
+        if (state.tableData[row + 1]) {
+          around = around.concat([
+            state.tableData[row + 1][cell - 1], state.tableData[row + 1][cell], state.tableData[row + 1][cell + 1]
+          ])
+        }
+
+        const counted = around.filter(function(v) {
+          return [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)
+        })
+
+        return counted.length
+      }
+
+      const count = checkAround()
+      Vue.set(state.tableData[row], cell, count)
     },
     [CLICK_MINE](state, {row, cell}) {
       state.halted = true // stop game
