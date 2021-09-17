@@ -69,6 +69,7 @@ export default new Vuex.Store({
     timer: 0,
     halted: true,
     result: '',
+    openedCellCount: 0 // row * cell - mine = 승리
   },
   mutations: {
     [START_GAME](state, {row, cell, mine}) {
@@ -80,8 +81,11 @@ export default new Vuex.Store({
       state.tableData = plantMine(row, cell, mine)
       state.timer = 0
       state.halted = false
+      state.openedCellCount = 0
+      state.result = ''
     },
     [OPEN_CELL](state, {row, cell}) {
+      let openedCellCount = 0
       const checked = []
 
       function checkAround(row, cell) { // 클릭된 cell 기준 주변 8칸이 지뢰인지 검색
@@ -151,9 +155,26 @@ export default new Vuex.Store({
             }
           })
         }
+        if (state.tableData[row][cell] === CODE.NORMAL) {
+          openedCellCount += 1
+        }
+
         Vue.set(state.tableData[row], cell, counted.length)
       }
+
       checkAround(row, cell)
+
+      let halted = false
+      let result = ''
+
+      if (state.data.row * state.data.cell - state.data.mine === state.openedCellCount + openedCellCount) {
+        halted = true
+        result = `${state.timer}초만에 승리하셨습니다.`
+      }
+
+      state.openedCellCount += openedCellCount
+      state.halted = halted
+      state.result = result
     },
     [CLICK_MINE](state, {row, cell}) {
       state.halted = true // stop game
