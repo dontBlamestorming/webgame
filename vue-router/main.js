@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import MineSweeper from "./MineSweeper";
+import Router from "./Router";
 
 // new Vue({ render: createElement => createElement(TicTacToe)}).$mount('#root')
-new Vue(MineSweeper).$mount('#root');
+new Vue(Router).$mount('#root');
