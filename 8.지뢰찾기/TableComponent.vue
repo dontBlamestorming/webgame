@@ -40,7 +40,7 @@ export default {
         default:
           return
       }
-현    },
+    },
     onRightClickTd(row, cell) {
       if (this.halted) {
         return
